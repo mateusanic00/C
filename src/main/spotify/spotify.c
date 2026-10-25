@@ -20,18 +20,18 @@
 
     }
 
-static void sendMediaKey (WORD vk) {
-    INPUT inputs[2] = {0};
+static void sendMediaKey(int appCommand) {
+    HWND tray = FindWindowW(L"Shell_TrayWnd", NULL);
 
-    inputs[0].type = INPUT_KEYBOARD;
-    inputs[0].ki.wVk = vk;
+    if (tray == NULL) {
+        wprintf(L"[ERROR] Could not find the taskbar window.\n");
+        return;
+    }
 
-    inputs[1].type = INPUT_KEYBOARD;
-    inputs[1].ki.wVk = vk;
-    inputs[1].ki.dwFlags = KEYEVENTF_KEYUP;
-
-    UINT sent = SendInput(2, inputs, sizeof(INPUT));
+    SendMessageW(tray, WM_APPCOMMAND, (WPARAM)tray, MAKELPARAM(0, appCommand));
 }
+
+
 
 
 int wmain(void) {
@@ -57,18 +57,17 @@ int wmain(void) {
             switch ((int)msg.wParam) 
             {
                 case HOTKEY_NEXT:
-                    sendMediaKey(VK_MEDIA_NEXT_TRACK);
+                    sendMediaKey(APPCOMMAND_MEDIA_NEXTTRACK);
                     break;
                 case HOTKEY_PREVIOUS:
-                    sendMediaKey(VK_MEDIA_PREV_TRACK);
+                    sendMediaKey(APPCOMMAND_MEDIA_PREVIOUSTRACK);
                     break;
                 case HOTKEY_PLAY_PAUSE:
-                    sendMediaKey(VK_MEDIA_PLAY_PAUSE);
+                    sendMediaKey(APPCOMMAND_MEDIA_PLAY_PAUSE);
                     break;
             }
         }
     }
-
     // shortcuts : ctrl+alt+d
     // funcao pra trocar as teclas
     //v2.0 -> colocar musica por nome no terminal (listar opções se tiver mais de uma opção para o nome)
