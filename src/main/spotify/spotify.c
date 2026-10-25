@@ -36,18 +36,18 @@ static void sendMediaKey (WORD vk) {
 
 int wmain(void) {
     
-    const UNIT modifiers = MOD_CONTROL | MOD_ALT | MOD_NOREPEAT;
+    const UINT modifiers = MOD_CONTROL | MOD_ALT | MOD_NOREPEAT;
     MSG msg;
 
-    wprintf(L"CTRL + ALT + P -> Play/Pause\n");
+    wprintf(L"CTRL + ALT + X -> Play/Pause\n");
     wprintf(L"CTRL + ALT + D -> Next\n");
     wprintf(L"CTRL + ALT + A -> Previous\n");
     
     registerShortcut(HOTKEY_NEXT, modifiers, 'D');
 
-    registerShortcut(HOTKEY_PREVIOUS, modifiers, 'X');
+    registerShortcut(HOTKEY_PREVIOUS, modifiers, 'A');
 
-    registerShortcut(HOTKEY_PLAY_PAUSE, modifiers, 'A');
+    registerShortcut(HOTKEY_PLAY_PAUSE, modifiers, 'X');
 
 
     while (GetMessageW(&msg, NULL, 0, 0) > 0) 
@@ -57,13 +57,13 @@ int wmain(void) {
             switch ((int)msg.wParam) 
             {
                 case HOTKEY_NEXT:
-                    
+                    sendMediaKey(VK_MEDIA_NEXT_TRACK);
                     break;
                 case HOTKEY_PREVIOUS:
-                  
+                    sendMediaKey(VK_MEDIA_PREV_TRACK);
                     break;
                 case HOTKEY_PLAY_PAUSE:
-                    
+                    sendMediaKey(VK_MEDIA_PLAY_PAUSE);
                     break;
             }
         }
